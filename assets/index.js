@@ -205,90 +205,91 @@ const load = async (LIVE) => {
     return [fxSend, fxReturn, sum, toggle];
   };
 
-  const delayPedal = function (input, index) {
-    // Default settings
-    const defaults = {
-      tone: 2200,
-      speed: 0.45,
-      mix: 0.3,
-      feedback: 0.4,
-      active: true,
-      maxDelay: 1.5,
-    };
+  // const delayPedal = function (input, index) {
+  //   // Default settings
+  //   const defaults = {
+  //     tone: 2200,
+  //     speed: 0.45,
+  //     mix: 0.3,
+  //     feedback: 0.4,
+  //     active: true,
+  //     maxDelay: 1.5,
+  //   };
 
-    // Create audio nodes
-    const delayGain = ctx.createGain();
-    const feedback = ctx.createGain();
-    const delay = ctx.createDelay(defaults.maxDelay);
-    const filter = ctx.createBiquadFilter();
+  //   // Create audio nodes
+  //   const delayGain = ctx.createGain();
+  //   const feedback = ctx.createGain();
+  //   const delay = ctx.createDelay(defaults.maxDelay);
+  //   const filter = ctx.createBiquadFilter();
 
-    const [fxSend, fxReturn, output, toggle] = createInputSwitchWithTails(input, defaults.active);
+  //   const [fxSend, fxReturn, output, toggle] = createInputSwitchWithTails(input, defaults.active);
 
-    // Set default values
-    delay.delayTime.value = defaults.speed;
-    feedback.gain.value = defaults.feedback;
-    delayGain.gain.value = defaults.mix;
-    filter.frequency.value = defaults.tone;
+  //   // Set default values
+  //   delay.delayTime.value = defaults.speed;
+  //   feedback.gain.value = defaults.feedback;
+  //   delayGain.gain.value = defaults.mix;
+  //   filter.frequency.value = defaults.tone;
 
-    // Connect the nodes togther
-    fxSend.connect(fxReturn);
-    fxSend.connect(filter);
-    filter.connect(delay);
-    delay.connect(feedback);
-    delay.connect(delayGain);
-    feedback.connect(delay);
-    delayGain.connect(fxReturn);
+  //   // Connect the nodes togther
+  //   fxSend.connect(fxReturn);
+  //   fxSend.connect(filter);
+  //   filter.connect(delay);
+  //   delay.connect(feedback);
+  //   delay.connect(delayGain);
+  //   feedback.connect(delay);
+  //   delayGain.connect(fxReturn);
 
-    // Create the DOM nodes
-    const pedal = createPedal({
-      name: 'delay',
-      label: 'setTimeout',
-      toggle,
-      active: defaults.active,
-      index,
-    });
+  //   // Create the DOM nodes
+  //   const pedal = createPedal({
+  //     name: 'delay',
+  //     label: 'setTimeout',
+  //     toggle,
+  //     active: defaults.active,
+  //     index,
+  //   });
 
-    createRotaryKnob({
-      pedal,
-      name: 'mix',
-      label: 'Mix',
-      onInput: updatePot(delayGain.gain),
-      value: defaults.mix,
-    });
+  //   createRotaryKnob({
+  //     pedal,
+  //     name: 'mix',
+  //     label: 'Mix',
+  //     onInput: updatePot(delayGain.gain),
+  //     value: defaults.mix,
+  //   });
 
-    createRotaryKnob({
-      pedal,
-      name: 'feedback',
-      label: 'Feedback',
-      max: 0.7,
-      onInput: updatePot(feedback.gain),
-      value: defaults.feedback,
-    });
+  //   createRotaryKnob({
+  //     pedal,
+  //     name: 'feedback',
+  //     label: 'Feedback',
+  //     max: 0.7,
+  //     onInput: updatePot(feedback.gain),
+  //     value: defaults.feedback,
+  //   });
 
-    createRotaryKnob({
-      pedal,
-      name: 'speed',
-      label: 'Speed',
-      max: defaults.maxDelay,
-      onInput: updatePot(delay.delayTime),
-      value: defaults.speed,
-    });
+  //   createRotaryKnob({
+  //     pedal,
+  //     name: 'speed',
+  //     label: 'Speed',
+  //     max: defaults.maxDelay,
+  //     onInput: updatePot(delay.delayTime),
+  //     value: defaults.speed,
+  //   });
 
-    createRotaryKnob({
-      pedal,
-      name: 'tone',
-      label: 'Tone',
-      min: 200,
-      max: 6000,
-      step: 200,
-      onInput: updatePot(filter.frequency),
-      value: defaults.tone,
-    });
+  //   createRotaryKnob({
+  //     pedal,
+  //     name: 'tone',
+  //     label: 'Tone',
+  //     min: 200,
+  //     max: 6000,
+  //     step: 200,
+  //     onInput: updatePot(filter.frequency),
+  //     value: defaults.tone,
+  //   });
 
-    $pedalboard.appendChild(pedal);
+  //   $pedalboard.appendChild(pedal);
 
-    return output;
-  };
+  //   return output;
+  // };
+
   /* 
   const harmonicTremoloPedal = function(input, index) {
     // Default settings
@@ -392,7 +393,7 @@ const load = async (LIVE) => {
   };
  */
 
-  const tremoloPedal = function (input, index) {
+  /* const tremoloPedal = function (input, index) {
     // Default settings
     const defaults = {
       speed: 3,
@@ -471,8 +472,9 @@ const load = async (LIVE) => {
 
     return output;
   };
+ */
 
-  const chorusPedal = function (input, index) {
+  /* const chorusPedal = function (input, index) {
     // Default settings
     const defaults = {
       speed: 1,
@@ -560,9 +562,9 @@ const load = async (LIVE) => {
     $pedalboard.appendChild(pedal);
 
     return output;
-  };
+  }; */
 
-  const boostPedal = function (input, index) {
+  /* const boostPedal = function (input, index) {
     // Default settings
     const defaults = {
       gain: 1.5,
@@ -685,9 +687,9 @@ const load = async (LIVE) => {
     $pedalboard.appendChild(pedal);
 
     return output;
-  };
+  }; */
 
-  const reverbPedal = function (input, index) {
+  /* const reverbPedal = function (input, index) {
     // Default settings
     const defaults = {
       mix: 0.3,
@@ -754,9 +756,9 @@ const load = async (LIVE) => {
     $pedalboard.appendChild(pedal);
 
     return output;
-  };
+  }; */
 
-  const compressorPedal = function (input, index) {
+  /* const compressorPedal = function (input, index) {
     // Default settings
     const defaults = {
       mix: 0.85,
@@ -837,9 +839,9 @@ const load = async (LIVE) => {
     $pedalboard.appendChild(pedal);
 
     return output;
-  };
+  }; */
 
-  const overdrivePedal = function (input, index) {
+  /* const overdrivePedal = function (input, index) {
     // Default settings
     const defaults = {
       active: false,
@@ -913,7 +915,7 @@ const load = async (LIVE) => {
 
     return output;
   };
-
+ */
   const loopPedal = function (input, index) {
     // Default settings
     const defaults = {
@@ -1138,7 +1140,7 @@ const load = async (LIVE) => {
 
   /*   const pedals = [wahPedal, compressorPedal, overdrivePedal, boostPedal, chorusPedal, harmonicTremoloPedal, delayPedal, reverbPedal, tremoloPedal, loopPedal]; */
 
-  const pedals = [wahPedal, compressorPedal, overdrivePedal, boostPedal, chorusPedal, delayPedal, reverbPedal, tremoloPedal, loopPedal];
+  const pedals = [loopPedal];
 
   const output = pedals.reduce((input, pedal, index) => {
     return pedal(input, index + 1);
