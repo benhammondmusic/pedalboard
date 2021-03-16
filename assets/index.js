@@ -1,4 +1,4 @@
-const load = async LIVE => {
+const load = async (LIVE) => {
   const DEV = false;
   const ctx = new window.AudioContext();
   const audio = document.querySelector('audio');
@@ -13,8 +13,8 @@ const load = async LIVE => {
     return;
   }
 
-  const updatePot = pot => {
-    return event => {
+  const updatePot = (pot) => {
+    return (event) => {
       pot.value = event.target.value;
     };
   };
@@ -25,16 +25,7 @@ const load = async LIVE => {
     knob.style.setProperty('--percentage', squashed);
   };
 
-  const createRotaryKnob = ({
-    pedal,
-    name,
-    label,
-    min = 0,
-    max = 1,
-    step = 0.01,
-    value = 0,
-    onInput
-  }) => {
+  const createRotaryKnob = ({ pedal, name, label, min = 0, max = 1, step = 0.01, value = 0, onInput }) => {
     const type = pedal.dataset.type;
     const wrapper = document.createElement('li');
 
@@ -48,7 +39,7 @@ const load = async LIVE => {
       const input = wrapper.querySelector('input');
       setKnob(knob, min, max, value);
 
-      input.addEventListener('input', event => {
+      input.addEventListener('input', (event) => {
         onInput(event);
         setKnob(knob, min, max, event.target.value);
       });
@@ -56,17 +47,17 @@ const load = async LIVE => {
       let engaged = false;
       let prevY = null;
 
-      const engage = event => {
+      const engage = (event) => {
         engaged = true;
         let prevY = event.clientY;
         event.preventDefault();
       };
 
-      const disengage = event => {
+      const disengage = (event) => {
         engaged = false;
       };
 
-      const rotaryMove = Y => {
+      const rotaryMove = (Y) => {
         if (engaged) {
           if (prevY - Y === 0) {
             return;
@@ -81,7 +72,7 @@ const load = async LIVE => {
           input.dispatchEvent(
             new Event('input', {
               bubbles: true,
-              cancelable: true
+              cancelable: true,
             })
           );
         }
@@ -93,11 +84,11 @@ const load = async LIVE => {
       window.addEventListener('touchend', disengage);
 
       // Add touch support
-      window.addEventListener('mousemove', event => {
+      window.addEventListener('mousemove', (event) => {
         rotaryMove(event.clientY);
       });
 
-      window.addEventListener('touchmove', event => {
+      window.addEventListener('touchmove', (event) => {
         rotaryMove(event.touches[0].clientY);
       });
     }
@@ -110,14 +101,7 @@ const load = async LIVE => {
     return knob;
   };
 
-  const createSwitch = ({
-    pedal,
-    name,
-    label,
-    value = 0,
-    onInput,
-    options = []
-  }) => {
+  const createSwitch = ({ pedal, name, label, value = 0, onInput, options = [] }) => {
     const type = pedal.dataset.type;
     const wrapper = document.createElement('li');
 
@@ -125,9 +109,7 @@ const load = async LIVE => {
     <select id="${type}_${name}" name="${name}"/>
       ${options
         .map(({ label, value: val }) => {
-          return `<option value="${val}"${
-            value === val ? ' selected' : ''
-          }>${label}</option>`;
+          return `<option value="${val}"${value === val ? ' selected' : ''}>${label}</option>`;
         })
         .join('')}
     </select>`;
@@ -146,7 +128,7 @@ const load = async LIVE => {
 
   const createPedal = ({ name, label, toggle, active, index = 0 }) => {
     const pedal = document.createElement('div');
-    const id = name.replace(/\s/g, '-')
+    const id = name.replace(/\s/g, '-');
     pedal.innerHTML = `<ul class="pedal__controls"></ul>
     <div class="pedal__on-off">
       <input id="${id}_active" type="checkbox" ${active ? 'checked' : ''} />
@@ -175,7 +157,7 @@ const load = async LIVE => {
   };
 
   const toggleOnOff = (dry, wet) => {
-    return on => {
+    return (on) => {
       const active = on === undefined ? !!dry.gain.value : on;
 
       if (active) {
@@ -223,7 +205,7 @@ const load = async LIVE => {
     return [fxSend, fxReturn, sum, toggle];
   };
 
-  const delayPedal = function(input, index) {
+  const delayPedal = function (input, index) {
     // Default settings
     const defaults = {
       tone: 2200,
@@ -231,7 +213,7 @@ const load = async LIVE => {
       mix: 0.3,
       feedback: 0.4,
       active: true,
-      maxDelay: 1.5
+      maxDelay: 1.5,
     };
 
     // Create audio nodes
@@ -240,10 +222,7 @@ const load = async LIVE => {
     const delay = ctx.createDelay(defaults.maxDelay);
     const filter = ctx.createBiquadFilter();
 
-    const [fxSend, fxReturn, output, toggle] = createInputSwitchWithTails(
-      input,
-      defaults.active
-    );
+    const [fxSend, fxReturn, output, toggle] = createInputSwitchWithTails(input, defaults.active);
 
     // Set default values
     delay.delayTime.value = defaults.speed;
@@ -266,7 +245,7 @@ const load = async LIVE => {
       label: 'setTimeout',
       toggle,
       active: defaults.active,
-      index
+      index,
     });
 
     createRotaryKnob({
@@ -274,7 +253,7 @@ const load = async LIVE => {
       name: 'mix',
       label: 'Mix',
       onInput: updatePot(delayGain.gain),
-      value: defaults.mix
+      value: defaults.mix,
     });
 
     createRotaryKnob({
@@ -283,7 +262,7 @@ const load = async LIVE => {
       label: 'Feedback',
       max: 0.7,
       onInput: updatePot(feedback.gain),
-      value: defaults.feedback
+      value: defaults.feedback,
     });
 
     createRotaryKnob({
@@ -292,7 +271,7 @@ const load = async LIVE => {
       label: 'Speed',
       max: defaults.maxDelay,
       onInput: updatePot(delay.delayTime),
-      value: defaults.speed
+      value: defaults.speed,
     });
 
     createRotaryKnob({
@@ -303,14 +282,14 @@ const load = async LIVE => {
       max: 6000,
       step: 200,
       onInput: updatePot(filter.frequency),
-      value: defaults.tone
+      value: defaults.tone,
     });
 
     $pedalboard.appendChild(pedal);
 
     return output;
   };
-
+  /* 
   const harmonicTremoloPedal = function(input, index) {
     // Default settings
     const defaults = {
@@ -411,14 +390,15 @@ const load = async LIVE => {
 
     return output;
   };
-  
-  const tremoloPedal = function(input, index) {
+ */
+
+  const tremoloPedal = function (input, index) {
     // Default settings
     const defaults = {
       speed: 3,
       depth: 0.3,
       wave: 'sine',
-      active: true
+      active: true,
     };
 
     // Create audio nodes
@@ -450,7 +430,7 @@ const load = async LIVE => {
       label: '&lt;blink /&gt;',
       toggle,
       active: defaults.active,
-      index
+      index,
     });
 
     createRotaryKnob({
@@ -459,7 +439,7 @@ const load = async LIVE => {
       label: 'Speed',
       max: 4,
       onInput: updatePot(lfo.frequency),
-      value: defaults.speed
+      value: defaults.speed,
     });
 
     createRotaryKnob({
@@ -467,10 +447,10 @@ const load = async LIVE => {
       name: 'depth',
       label: 'Depth',
       value: defaults.depth,
-      onInput: event => {
+      onInput: (event) => {
         depthIn.gain.value = 1 - Number(event.target.value);
         depthOut.gain.value = Number(event.target.value);
-      }
+      },
     });
 
     createSwitch({
@@ -483,8 +463,8 @@ const load = async LIVE => {
         { label: 'Sine', value: 'sine' },
         { label: 'Square', value: 'square' },
         { label: 'Sawtooth', value: 'sawtooth' },
-        { label: 'Triangle', value: 'triangle' }
-      ]
+        { label: 'Triangle', value: 'triangle' },
+      ],
     });
 
     $pedalboard.appendChild(pedal);
@@ -492,12 +472,12 @@ const load = async LIVE => {
     return output;
   };
 
-  const chorusPedal = function(input, index) {
+  const chorusPedal = function (input, index) {
     // Default settings
     const defaults = {
       speed: 1,
       mix: 0.3,
-      active: false
+      active: false,
     };
 
     // Create audio nodes
@@ -562,7 +542,7 @@ const load = async LIVE => {
       label: 'float',
       toggle,
       active: defaults.active,
-      index
+      index,
     });
 
     createRotaryKnob({
@@ -571,10 +551,10 @@ const load = async LIVE => {
       label: 'Mix',
       max: 0.5,
       value: defaults.mix,
-      onInput: event => {
+      onInput: (event) => {
         mixIn.gain.value = 1 - Number(event.target.value);
         mixOut.gain.value = Number(event.target.value);
-      }
+      },
     });
 
     $pedalboard.appendChild(pedal);
@@ -582,11 +562,11 @@ const load = async LIVE => {
     return output;
   };
 
-  const boostPedal = function(input, index) {
+  const boostPedal = function (input, index) {
     // Default settings
     const defaults = {
       gain: 1.5,
-      active: false
+      active: false,
     };
 
     // Create audio nodes
@@ -608,7 +588,7 @@ const load = async LIVE => {
       label: '!important',
       toggle,
       active: defaults.active,
-      index
+      index,
     });
 
     createRotaryKnob({
@@ -617,7 +597,7 @@ const load = async LIVE => {
       label: 'Boost',
       max: 3,
       onInput: updatePot(boost.gain),
-      value: defaults.gain
+      value: defaults.gain,
     });
 
     $pedalboard.appendChild(pedal);
@@ -625,7 +605,7 @@ const load = async LIVE => {
     return output;
   };
 
-  const wahPedal = function(input, index) {
+  const wahPedal = function (input, index) {
     // Default settings
     const defaults = {
       frequency: 1000,
@@ -633,7 +613,7 @@ const load = async LIVE => {
       boost: 1.5,
       active: false,
       filterMin: 100,
-      filterMax: 1500
+      filterMax: 1500,
     };
 
     // Create audio nodes
@@ -661,7 +641,7 @@ const load = async LIVE => {
       label: '.filter()',
       toggle,
       active: defaults.active,
-      index
+      index,
     });
 
     const $filter = createRotaryKnob({
@@ -672,7 +652,7 @@ const load = async LIVE => {
       max: defaults.filterMax,
       step: 20,
       onInput: updatePot(filter.frequency),
-      value: defaults.frequency
+      value: defaults.frequency,
     });
 
     window.addEventListener('MIDIEXP', ({ detail }) => {
@@ -690,7 +670,7 @@ const load = async LIVE => {
       max: 1000,
       step: 10,
       onInput: updatePot(filter.q),
-      value: defaults.q
+      value: defaults.q,
     });
 
     createRotaryKnob({
@@ -699,7 +679,7 @@ const load = async LIVE => {
       label: 'Boost',
       max: 4,
       onInput: updatePot(boost.gain),
-      value: defaults.boost
+      value: defaults.boost,
     });
 
     $pedalboard.appendChild(pedal);
@@ -707,12 +687,12 @@ const load = async LIVE => {
     return output;
   };
 
-  const reverbPedal = function(input, index) {
+  const reverbPedal = function (input, index) {
     // Default settings
     const defaults = {
       mix: 0.3,
       tone: 4000,
-      active: true
+      active: true,
     };
 
     // Create audio nodes
@@ -721,10 +701,7 @@ const load = async LIVE => {
     const mixIn = ctx.createGain();
     const mixOut = ctx.createGain();
 
-    const [fxSend, fxReturn, output, toggle] = createInputSwitchWithTails(
-      input,
-      defaults.active
-    );
+    const [fxSend, fxReturn, output, toggle] = createInputSwitchWithTails(input, defaults.active);
 
     // Set default values
     mixIn.gain.value = 1 - defaults.mix;
@@ -748,7 +725,7 @@ const load = async LIVE => {
       label: 'spacer.gif',
       toggle,
       active: defaults.active,
-      index
+      index,
     });
 
     createRotaryKnob({
@@ -757,10 +734,10 @@ const load = async LIVE => {
       label: 'Mix',
       max: 1,
       value: defaults.mix,
-      onInput: event => {
+      onInput: (event) => {
         mixIn.gain.value = 1 - Number(event.target.value);
         mixOut.gain.value = Number(event.target.value);
-      }
+      },
     });
 
     createRotaryKnob({
@@ -771,7 +748,7 @@ const load = async LIVE => {
       max: 6000,
       step: 200,
       onInput: updatePot(tone.frequency),
-      value: defaults.tone
+      value: defaults.tone,
     });
 
     $pedalboard.appendChild(pedal);
@@ -779,14 +756,14 @@ const load = async LIVE => {
     return output;
   };
 
-  const compressorPedal = function(input, index) {
+  const compressorPedal = function (input, index) {
     // Default settings
     const defaults = {
       mix: 0.85,
       threshold: -30,
       attack: 0.1,
       release: 0.5,
-      active: false
+      active: false,
     };
 
     // Create audio nodes
@@ -817,7 +794,7 @@ const load = async LIVE => {
       label: 'Smoosh',
       toggle,
       active: defaults.active,
-      index
+      index,
     });
 
     createRotaryKnob({
@@ -825,10 +802,10 @@ const load = async LIVE => {
       name: 'mix',
       label: 'Mix',
       value: defaults.mix,
-      onInput: event => {
+      onInput: (event) => {
         mixIn.gain.value = 1 - Number(event.target.value);
         mixOut.gain.value = Number(event.target.value);
-      }
+      },
     });
 
     createRotaryKnob({
@@ -838,7 +815,7 @@ const load = async LIVE => {
       name: 'threshold',
       label: 'Threshold',
       value: defaults.threshold,
-      onInput: updatePot(compressor.threshold)
+      onInput: updatePot(compressor.threshold),
     });
 
     createRotaryKnob({
@@ -846,7 +823,7 @@ const load = async LIVE => {
       name: 'attack',
       label: 'Attack',
       value: defaults.attack,
-      onInput: updatePot(compressor.attack)
+      onInput: updatePot(compressor.attack),
     });
 
     createRotaryKnob({
@@ -854,7 +831,7 @@ const load = async LIVE => {
       name: 'release',
       label: 'Release',
       value: defaults.release,
-      onInput: updatePot(compressor.release)
+      onInput: updatePot(compressor.release),
     });
 
     $pedalboard.appendChild(pedal);
@@ -862,12 +839,12 @@ const load = async LIVE => {
     return output;
   };
 
-  const overdrivePedal = function(input, index) {
+  const overdrivePedal = function (input, index) {
     // Default settings
     const defaults = {
       active: false,
       drive: 30,
-      volume: 1
+      volume: 1,
     };
 
     // Create audio nodes
@@ -908,7 +885,7 @@ const load = async LIVE => {
       label: 'Math.pow()',
       toggle,
       active: defaults.active,
-      index
+      index,
     });
 
     createRotaryKnob({
@@ -918,9 +895,9 @@ const load = async LIVE => {
       value: defaults.drive,
       min: 0,
       max: 100,
-      onInput: event => {
+      onInput: (event) => {
         overdrive.curve = makeDistortionCurve(Number(event.target.value));
-      }
+      },
     });
 
     createRotaryKnob({
@@ -929,7 +906,7 @@ const load = async LIVE => {
       label: 'Volume',
       value: defaults.volume,
       max: 3,
-      onInput: updatePot(volume.gain)
+      onInput: updatePot(volume.gain),
     });
 
     $pedalboard.appendChild(pedal);
@@ -937,10 +914,10 @@ const load = async LIVE => {
     return output;
   };
 
-  const loopPedal = function(input, index) {
+  const loopPedal = function (input, index) {
     // Default settings
     const defaults = {
-      volume: 1
+      volume: 1,
     };
 
     // Create audio nodes
@@ -956,11 +933,11 @@ const load = async LIVE => {
       recording: 'recording',
       prepared: 'prepared',
       idle: 'idle',
-      cease: 'cease'
+      cease: 'cease',
     };
     let recordHead = STATES.empty;
 
-    recorder.addEventListener('dataavailable', e => {
+    recorder.addEventListener('dataavailable', (e) => {
       audio.src = URL.createObjectURL(e.data);
 
       if (recordHead === STATES.cease) {
@@ -973,7 +950,7 @@ const load = async LIVE => {
       led.dataset.state = 'playing';
     });
 
-    audio.addEventListener('ended', e => {
+    audio.addEventListener('ended', (e) => {
       if (recorder.state === 'recording') {
         recordHead = STATES.idle;
         recorder.stop();
@@ -991,8 +968,7 @@ const load = async LIVE => {
       }
 
       e.target.play();
-      led.dataset.state =
-        recordHead === STATES.recording ? 'overdubbing' : 'playing';
+      led.dataset.state = recordHead === STATES.recording ? 'overdubbing' : 'playing';
     });
 
     // Set default values
@@ -1069,14 +1045,14 @@ const load = async LIVE => {
         loopButton.dispatchEvent(
           new Event('click', {
             bubbles: true,
-            cancelable: true
+            cancelable: true,
           })
         );
       } else if (detail === 122) {
         stopButton.dispatchEvent(
           new Event('click', {
             bubbles: true,
-            cancelable: true
+            cancelable: true,
           })
         );
       } else if (detail === 123) {
@@ -1094,7 +1070,7 @@ const load = async LIVE => {
       label: 'Volume',
       max: 2,
       value: defaults.volume,
-      onInput: updatePot(volume.gain)
+      onInput: updatePot(volume.gain),
     });
 
     $pedalboard.appendChild(pedal);
@@ -1120,18 +1096,18 @@ const load = async LIVE => {
   };
 
   await fetch('/assets/Conic Long Echo Hall.wav')
-    .then(response => response.arrayBuffer())
-    .then(data => {
-      return ctx.decodeAudioData(data, b => {
+    .then((response) => response.arrayBuffer())
+    .then((data) => {
+      return ctx.decodeAudioData(data, (b) => {
         buffer = b;
       });
     })
-    .catch(e => onError('Failed to load reverb impulse'));
+    .catch((e) => onError('Failed to load reverb impulse'));
 
   try {
     const midiCtx = await navigator.requestMIDIAccess();
 
-    midiCtx.inputs.forEach(entry => {
+    midiCtx.inputs.forEach((entry) => {
       entry.onmidimessage = onMidiMessage;
     });
   } catch (e) {
@@ -1143,9 +1119,9 @@ const load = async LIVE => {
     stream = await navigator.mediaDevices
       .getUserMedia({
         audio: true,
-        video: false
+        video: false,
       })
-      .catch(e => onError("Couldn't connect to your microphone 😔"));
+      .catch((e) => onError("Couldn't connect to your microphone 😔"));
   }
 
   let source;
@@ -1160,18 +1136,7 @@ const load = async LIVE => {
     audio.play();
   }
 
-  const pedals = [
-    wahPedal,
-    compressorPedal,
-    overdrivePedal,
-    boostPedal,
-    chorusPedal,
-    harmonicTremoloPedal,
-    delayPedal,
-    reverbPedal,
-    tremoloPedal,
-    loopPedal
-  ];
+  const pedals = [wahPedal, compressorPedal, overdrivePedal, boostPedal, chorusPedal, harmonicTremoloPedal, delayPedal, reverbPedal, tremoloPedal, loopPedal];
 
   const output = pedals.reduce((input, pedal, index) => {
     return pedal(input, index + 1);
@@ -1189,7 +1154,7 @@ const load = async LIVE => {
     }, 1000);
   };
 
-  [].forEach.call(document.querySelectorAll('.start'), el => {
+  [].forEach.call(document.querySelectorAll('.start'), (el) => {
     el.addEventListener('click', getStarted);
   });
 })();
