@@ -995,7 +995,7 @@ const load = async (LIVE) => {
     <div class="pedal__on-off">
       <output class="pedal__led"></output>
       <div class="pedal__double-button">
-        <button type="button" class="pedal__button" data-label aria-label="Loop/Overdub"></button>
+        <button type="button" class="pedal__button" data-label aria-label="LoopDub"></button>
         <button type="button" class="pedal__button" data-label aria-label="StartStop"></button>
       </div>
     </div>
@@ -1015,7 +1015,7 @@ const load = async (LIVE) => {
     pedal.appendChild(cassette);
 
     const led = pedal.querySelector('.pedal__led');
-    const loopButton = pedal.querySelector('[aria-label="Loop"]');
+    const loopButton = pedal.querySelector('[aria-label="LoopDub"]');
     const stopButton = pedal.querySelector('[aria-label="StartStop"]');
     led.dataset.state = '';
 
