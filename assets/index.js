@@ -1150,9 +1150,14 @@ const load = async (LIVE) => {
 
   const pedals = [loopPedal];
 
+  console.log(pedals, 'PEDALS ARRAY');
+
   const output = pedals.reduce((input, pedal, index) => {
+    console.log(input, 'INPUT', pedal, 'PEDAL', index, 'INDEX', source, 'SOURCE');
     return pedal(input, index + 1);
   }, source);
+
+  console.log(output, 'OUTPUT');
 
   output.connect(ctx.destination);
 };
