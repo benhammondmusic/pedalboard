@@ -996,7 +996,7 @@ const load = async (LIVE) => {
       <output class="pedal__led"></output>
       <div class="pedal__double-button">
         <button type="button" class="pedal__button" data-label aria-label="Loop/Overdub"></button>
-        <button type="button" class="pedal__button" data-label aria-label="Start-Stop"></button>
+        <button type="button" class="pedal__button" data-label aria-label="StartStop"></button>
       </div>
     </div>
     <h2>Rang.JS</h2>
@@ -1016,7 +1016,7 @@ const load = async (LIVE) => {
 
     const led = pedal.querySelector('.pedal__led');
     const loopButton = pedal.querySelector('[aria-label="Loop"]');
-    const stopButton = pedal.querySelector('[aria-label="Start-Stop"]');
+    const stopButton = pedal.querySelector('[aria-label="StartStop"]');
     led.dataset.state = '';
 
     loopButton.addEventListener('click', () => {
