@@ -916,6 +916,10 @@ const load = async (LIVE) => {
     return output;
   };
  */
+
+  //
+  // LOOP PEDAL
+  //
   const loopPedal = function (input, index) {
     // Default settings
     const defaults = {
@@ -992,10 +996,10 @@ const load = async (LIVE) => {
       <output class="pedal__led"></output>
       <div class="pedal__double-button">
         <button type="button" class="pedal__button" data-label aria-label="Loop"></button>
-        <button type="button" class="pedal__button" data-label aria-label="Stop"></button>
+        <button type="button" class="pedal__button" data-label aria-label="StartStop"></button>
       </div>
     </div>
-    <h2>for(loop)</h2>
+    <h2>while(loop)</h2>
     <span class="pedal__jack"></span>
     <span class="pedal__jack"></span>`;
 
@@ -1012,7 +1016,7 @@ const load = async (LIVE) => {
 
     const led = pedal.querySelector('.pedal__led');
     const loopButton = pedal.querySelector('[aria-label="Loop"]');
-    const stopButton = pedal.querySelector('[aria-label="Stop"]');
+    const stopButton = pedal.querySelector('[aria-label="StartStop"]');
     led.dataset.state = '';
 
     loopButton.addEventListener('click', () => {
@@ -1079,6 +1083,10 @@ const load = async (LIVE) => {
 
     return output;
   };
+
+  //
+  // END LOOP PEDAL
+  //
 
   const onError = (message = '') => {
     const error = document.createElement('div');
