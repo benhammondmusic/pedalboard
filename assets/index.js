@@ -1136,7 +1136,9 @@ const load = async (LIVE) => {
     audio.play();
   }
 
-  const pedals = [wahPedal, compressorPedal, overdrivePedal, boostPedal, chorusPedal, harmonicTremoloPedal, delayPedal, reverbPedal, tremoloPedal, loopPedal];
+  /*   const pedals = [wahPedal, compressorPedal, overdrivePedal, boostPedal, chorusPedal, harmonicTremoloPedal, delayPedal, reverbPedal, tremoloPedal, loopPedal]; */
+
+  const pedals = [wahPedal, compressorPedal, overdrivePedal, boostPedal, chorusPedal, delayPedal, reverbPedal, tremoloPedal, loopPedal];
 
   const output = pedals.reduce((input, pedal, index) => {
     return pedal(input, index + 1);
