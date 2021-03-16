@@ -1148,16 +1148,11 @@ const load = async (LIVE) => {
 
   /*   const pedals = [wahPedal, compressorPedal, overdrivePedal, boostPedal, chorusPedal, harmonicTremoloPedal, delayPedal, reverbPedal, tremoloPedal, loopPedal]; */
 
-  const pedals = [loopPedal];
-
-  console.log(pedals, 'PEDALS ARRAY');
+  const pedals = [loopPedal, loopPedal];
 
   const output = pedals.reduce((input, pedal, index) => {
-    console.log(input, 'INPUT', pedal, 'PEDAL', index, 'INDEX', source, 'SOURCE');
     return pedal(input, index + 1);
   }, source);
-
-  console.log(output, 'OUTPUT');
 
   output.connect(ctx.destination);
 };
